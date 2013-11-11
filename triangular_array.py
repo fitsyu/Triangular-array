@@ -28,14 +28,16 @@ def transpose(a):
 				kolom = row.index(col)  
 				a[baris][kolom] = a[kolom][baris]
 				a[kolom][baris] = 0
-
+				
+	show_array(a)
+				
 def merge(arrayA, arrayB):
 
 	arrayA_Zero = len([ each for each in arrayA[0] if each == 0])
 	if arrayA_Zero > 0 :
-		arrayA_Orientation = 'b'
+		arrayA_Orientation = 'l'
 	else:
-		arrayA_Orientation = 'a'
+		arrayA_Orientation = 'u'
 		
 	arrayB_Zero = len([ each for each in arrayB[0] if each == 0])
 	if arrayB_Zero > 0:
@@ -64,6 +66,29 @@ def merge(arrayA, arrayB):
 					arrayC[baris][kolom] = b.pop(0)
 		
 		return arrayC
+	#  a + b, n=n
+	elif arrayA_Orientation != arrayB_Orientation and arrayB_ordo == arrayA_ordo:
+		baris1 =[r for r in arrayB[0] if r != 0]+[r for r in arrayA[0] if r != 0]
+		arrayC=[baris1]
+		for row in range( len(arrayA)-1 ):
+			arrayC.append([r for r in arrayB[row+1] if r != 0]+[r for r in arrayA[row+1] if r != 0] )
+			
+		return arrayC
+	# a + a, n = n
+	elif arrayA_Orientation == arrayB_Orientation and arrayB_ordo == arrayA_ordo:
+	
+		transpose(arrayB)
+		show_array(arrayB)
+		baris1 =[r for r in arrayA[0] if r != 0]+[r for r in arrayB[0] if r != 0]
+		arrayC=[baris1]
+		for row in range( len(arrayA)-1 ):
+			arrayC.append([r for r in arrayA[row+1] if r != 0]+[r for r in arrayB[row+1] if r != 0] )
+			
+		return arrayC
+		
+	
+ 		
+
 	
 	
 
@@ -83,18 +108,22 @@ if __name__ == "__main__":
 		ordo = int(raw_input("How much its ordo? [number min 2] : "))
 		print
 		ta=triangular_array(orientation, ordo)
+		print "array A"
 		show_array(ta)
 		
 		print "Transposed ... "
 		transpose(ta)
-		show_array(ta)
 		
 		
-		tb = triangular_array('l', ordo - 1)
-
-		print "Merged ... "
-		tc = merge(ta, tb)
-		show_array(tc)
+		
+		tb = triangular_array(orientation, ordo)
+		print "array B"
+		show_array(tb)
+		#
+		print
+		#print "Merged ... "
+		#tc = merge(ta, tb)
+		#show_array(tc)
 		if raw_input("Again? [y/n] :") == "n":
 			break
 		
